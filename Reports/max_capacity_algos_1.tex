@@ -1,0 +1,76 @@
+
+The \ac{SP} based user selection \cite{dimic2005downlink,shen2006low,antti_user_selection,sus2006zfbf,zhang2007user} provides efficient multiplexing by selecting a set of users with most linearly independent channel vectors. The selection procedure select the users in a greedy way at each instant. Let \me{i,j} be the indices of two users whose projection onto the null space \eqref{mca3-e1} yields the same metric value. It would be wiser to choose the user whose channel is well separated from the remaining user set \me{\mc{U} \bs \{ \mc{S} \cup k \}} with \me{k} being either \me{i} or \me{j} as discussed in \cite{wmmse_shi}. The \ac{AHP} scheme performs selection by considering the channel separation over the set \me{\mc{U} \bs \mc{S}} apart from considering \me{\mc{S}}.
+
+The \ac{AHP} is a systematic procedure to select the best alternatives from the set of alternatives based on certain goals to be attained. The \ac{AHP} quantifies the alternatives with the priority metric which ranges between \me{[0,1]} with \me{1} representing the highest priority \cite{saaty2008decision}. The \ac{AHP} is used in the decision making process where the objective is to choose an alternative with the given constraints. The \ac{AHP} based procedure is utilized to select a user from the set \me{\mc{U}} with the objective of increasing the sum rate over the existing users in the set \me{\mc{S}}.
+
+The \ac{AHP} procedure begins by formulating the pairwise symmetric matrix \me{\mbf{P}}, where each entry \me{\msclxyz{P}{i}{j}} should represent the pairwise relation between the users in \me{i^{\mrm{th}}} row and \me{j^{\mrm{th}}} column. Since the capacity is proportional to the volume enclosed between the channel vectors of user \me{i} and \me{j} \cite{ko2012determinant}, volume can be used as a metric to quantify the gain in multiplexing users \me{i} and \me{j}. The multiplexing gain between user \me{i} and \me{j} should include the vectors of users in \me{\mc{S}}, since they are already chosen in the previous iterations.
+
+The selection procedure is initialized with the set \me{\mc{S} = \emptyset}, which is updated with the users at each iteration based on the selection criterion discussed below. The entry \me{\msclxyz{P}{i}{j}} denotes the volume of the user channel vectors \me{i^\mrm{th}} and \me{j^\mrm{th}} as given by \eqref{mca1-e1:1}
+\begin{eqnarray}
+\mbf{S} &=& \matscont{\mbf{H}^\mrm{T} \; \mvecxy{h}{i}^\mrm{T} \; \mvecxy{h}{j}^\mrm{T}} \\
+\msclxyz{P}{i}{j} &=& \det{\left ( \, \mbf{S}^{\mrm{H}} \; \mbf{S} \, \right )} \label{mca1-e1:1}
+\label{mca1-e1}
+\end{eqnarray}
+where \me{\mbf{H}^\mrm{T}} represents the stacked channel vectors of users in the set \me{\mc{S}} as given by \eqref{sm-e3:1}. The volume subtended by the column vectors of \me{\mbf{S}} is given by the determinant of the inner product \me{\mbf{S}^\mrm{H} \mbf{S}} which provides a measure of independency. The entry \me{\msclxyz{P}{i}{i}} corresponds to the diagonal entry of \me{\mbf{P}} represents the metric corresponds to the volume subtended between the channel vectors of users in \me{\mc{S}} and the \me{i^\mrm{th}} user as given by
+\begin{eqnarray}
+\mbf{S} &=& \matscont{\mbf{H}^\mrm{T} \; \mvecxy{h}{i}^\mrm{T}}
+\label{mca1-e2}
+\end{eqnarray}
+where \me{\msclxyz{P}{i}{i}} is given by \eqref{mca1-e1:1} with \me{j = i}.
+
+Matrix \me{\mbf{P}} of size \me{K \times K} represents the pairwise matrix with each entry updated with the volume formed between the already chosen set \me{\mc{S}} and the channel vector of users indexed by the row-column index. In order to find the candidate user for the set \me{\mc{S}} in the current iteration, the priorities for the users need to be evaluated based on capacity maximizing objective. The priorities among the users are given by the dominant eigen-vector of the matrix \me{\mbf{P} \succeq 0} \cite{saaty2008decision}. Let \me{\mbf{E} \mbf{\Lambda} \mbf{E}^\mrm{H}} be the eigen-value decomposition (EVD) of the matrix \me{\mbf{P}} and \me{\mvecxy{e}{\lambda_{\max}}} be the eigen-vector corresponding to the eigen-value \me{\lambda_{\max} \geq \lambda_i \fall \, \Lambda(i,i)} where \me{\mbf{\Lambda}} is the diagonal matrix with the eigen-values as the entries. The selection of user \me{i} is and the set update is given as
+\begin{eqnarray}
+i &=& \arg \max_{\mathrm{j}} |\;\msclxy{e}{\lambda_{\max}}(j)\;| \label{mca1-e3:1} \\
+\mc{S} &=& \left \lbrace \, \mc{S} \, \cup \, i \, \right \rbrace.
+\label{mca1-e3}
+\end{eqnarray}
+
+Selection is carried out in an iterative manner with the stopping criterion given by \me{\card{\mc{S}} = N_\mrm{T}} as detailed in Algorithm. \ref{mca1-a1}. Precoding is performed over the channels of the users in \me{\mc{S}} which forms the transmission set.
+\begin{algorithm}
+ \SetAlgoLined
+ \DontPrintSemicolon
+ \KwIn{\me{\mvecxy{h}{j} \fall j \inm \mc{U} }}
+ \KwData{\me{\mc{S} = \emptyset, \, \mbf{P}, \, \mbf{H} = [\,]}}
+ \While{\me{\card{S} \leq N_\mrm{T}}}{
+ \ForEach{\me{ \msclxyz{P}{i}{j}, \, \mrm{where } \, i,j \inm \mc{U} \bs \mc{S}}}{
+ formulate \me{\msclxyz{P}{i}{j}} using \eqref{mca1-e1:1} \;
+ }
+ perform EVD as \me{\mbf{M} = \mbf{E} \, \mbf{\Lambda} \, \mbf{E}^\mrm{H}} \;
+ select user \me{i} using \eqref{mca1-e3:1} \;
+ \me{\mc{S} = \{ \, \mc{S} \cup i \, \}}, \me{\mbf{H} = \matscont{\mbf{H}^\mrm{T} \; \mvecxy{h}{i}^\mrm{T}}^\mrm{T}} \;
+ }
+ \caption{AHP based User Selection}
+ \label{mca1-a1}
+\end{algorithm}
+
+The diagonal entries of \me{\mbf{P}} requires \me{\varphi_1(x) = x^2 \, N_\mrm{T} + O(x^3)} and off-diagonal entries require \me{\varphi_2(x) = (x + 1)^2 N_\mrm{T} + O((x + 1)^3)} complex multiplications with \me{x} being the size of the square matrix \me{\mbf{P}} formed at each iteration. The total number of complex operations involved in the \ac{AHP} scheme is given by
+\begin{eqnarray*}
+\zeta_2 = O \left ( \underbrace{\varphi_1(N_\mrm{T})}_{\mathclap{\text{last iteration}}} + \sum^{N_\mrm{T} - 1}_{q = 1} \varphi_1(q) \, \delta_1 + \varphi_2(q) \, \delta_2 + \eta(\delta_1) \right )
+\end{eqnarray*}
+where \me{\delta_1} represents the number of users at each iteration as given by \me{\delta_1 = K - q + 1} and \me{\delta_2} denotes the number of entries in the symmetric matrix \me{\mbf{P}} as given by \me{\delta_2 = \delta_1 \, \frac{(\delta_1 - 1)}{2}}. Vector \me{\mvecxy{e}{\lambda_{\max}}} can be evaluated by normalizing the first column of the matrix \me{\mbf{A} = \mbf{P}^k} with \me{k} denoting the power \cite{saaty2008decision}. The complexity involved for computing \me{\mvecxy{e}{\lambda_{\max}}} with any \me{k} is given by \me{\eta(\delta_1) = k \, \delta_1^3}.
+
+The performance of the \ac{AHP} based scheme provides improved performance over the existing \ac{SP} scheme. The performance of the \ac{AHP} in terms of sum capacity can be achieved efficiently without performing the EVD over the matrix \me{\mbf{P}}. Since \me{\mbf{P}} is symmetric, the maximum volume entry is selected over the lower triangle entries of the \me{\mbf{P}} thereby limiting the search over \me{K \, \frac{(K + 1)}{2}} entries. Once the maximum element \me{P_{p,q}} is selected, the candidate user for the set \me{\mc{S}} is given as \me{p} if \me{P_{p,p} \geq P_{q,q}} else user \me{q} is selected. The selection procedure discussed is represented as \ac{M-AHP} as briefed in Algorithm \ref{mca1-a2}.
+\begin{algorithm}
+ \SetAlgoLined
+ \DontPrintSemicolon
+ \KwIn{\me{\mvecxy{h}{j} \fall j \inm \mc{U} }}
+ \KwData{\me{\mc{S} = \emptyset, \, \mbf{P}, \, \mbf{H} = [\,]}}
+ \While{\me{\card{S} \leq N_\mrm{T}}}{
+ \ForEach{\me{ \msclxyz{P}{i}{j}, \, \mrm{where } \, i \inm \mc{U} \bs \mc{S} \; , j \leq i}}{
+ formulate \me{\msclxyz{P}{i}{j}} using \eqref{mca1-e1:1} \;
+ }
+ select user pair with \me{\setcont{p,q} = \arg\max_{i,j} \msclxy{P}{i,j}} \;
+ \eIf{\me{\msclxy{P}{p,p} \geq \msclxy{P}{q,q}}}
+ {\me{\mc{S} = \{ \, \mc{S} \cup p \, \}}, \me{\mbf{H} = \matscont{\mbf{H}^\mrm{T} \; \mvecxy{h}{p}^\mrm{T}}^\mrm{T}}}
+ {\me{\mc{S} = \{ \, \mc{S} \cup q \, \}}, \me{\mbf{H} = \matscont{\mbf{H}^\mrm{T} \; \mvecxy{h}{q}^\mrm{T}}^\mrm{T}}}
+ }
+ \caption{\ac{M-AHP} User Selection}
+ \label{mca1-a2}
+\end{algorithm}
+
+The complexity involved with the \ac{M-AHP} scheme is similar to the \ac{AHP} scheme without EVD as given by
+\begin{eqnarray*}
+\zeta_3 = O \left ( \underbrace{\varphi_1(N_\mrm{T})}_{\mathclap{\text{last iteration}}} + \sum^{N_\mrm{T} - 1}_{q = 1} \varphi_1(q) \, \delta_1 + \varphi_2(q) \, \delta_2 \right )
+\end{eqnarray*}
+with the variable representations are as discussed before.
+

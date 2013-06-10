@@ -1,0 +1,66 @@
+
+This section details the \ac{S-US} scheme, which select the users for the transmission set \me{\mc{S}_b} from the statically assigned user set \me{\mc{U}_b} of the BS \me{b}. The \ac{DoF} available from the multi-antenna transmission are shared among the cooperating BSs to provide interference free transmission for the users in the sets \me{\mc{S}_b \fall b \inm \mc{B}} at each scheduling instant. The \ac{DoF} corresponds to the number of interference free independent streams possible with the multi-antenna system \cite{tse2005fundamentals}. 
+
+In order to provide interference-free transmission in the multiple \ac{BS} scenario, precoders for the desired users should span the null space of the channels seen between the desired cell \me{b} and the users in the neighboring cells \me{\mc{B} \bs b}. In order to achieve the null space, the available \ac{DoF}'s should be shared among the cooperating \ac{BS}'s which restricts the transmission set \me{\mc{S}_b} at any scheduling instant to \me{\mu = \lfloor \, \sfrac{N_\mrm{T}}{N_\mrm{B}} \, \rfloor}, assuming \me{N_\mrm{T} \geq N_\mrm{B}} where \me{N_\mrm{B} = \card{\mc{B}}}.
+
+The \ac{S-US} scheme is performed over the \ac{BS}'s in the set \me{\mc{B}} in any arbitrary permutation which is given by \me{\mc{C} = \pi(\mc{B})}. The \ac{S-US} scheme is initialized by performing user selection based on \ac{SUS} scheme \cite{sus2006zfbf} or the \ac{GS} based determinant scheme discussed in \cite{jin2010novel} for the \ac{BS} \me{\mc{C}(1)}. The number of users selected for the transmission set \me{\mc{S}_{\mc{C}(1)}} is limited to \me{\card{\mc{S}_{\mc{C}(1)}} = \mu}. Once the selection is performed for the \ac{BS} \me{\mc{C}(1)}, the next \ac{BS} \me{\mc{C}_2} performs user selection by considering the transmission set of \ac{BS} \me{\mc{C}(1)}. The selection scheme is performed by projecting the users of the \ac{BS} \me{\mc{C}(2)} over the null space of the channel vectors between the BS \me{\mc{C}(2)} and the users in \me{\card{\mc{S}_{\mc{C}(1)}}}. The stacked channel vectors of the \ac{BS} \me{b} in \me{\mc{C}} is given by
+\begin{eqnarray}
+\mbf{H}_b &=& \matscont{\mvecnxyz{h}{b}{\mc{S}_{\mc{B}}(1)}^\mrm{T} \quad, \mvecnxyz{h}{b}{\mc{S}_{\mc{B}}(2)}^\mrm{T} \quad \dotsc \quad \mvecnxyz{h}{b}{\mc{S}_{\mc{B}}(\card{\mc{S}_{\mc{B}}})}^\mrm{T} } \label{sus-e1:1}\\
+\mc{S}_\mc{B} &=& \displaystyle \bigcup_{\fall b \inm \mc{B}} \mc{S}_b
+\label{sus-e1}
+\end{eqnarray}
+where set \me{\mc{S}_\mc{B}} represents the union of all the transmission set belonging to the cooperating \ac{BS}'s in the system and \eqref{sus-e1:1} is equivalent to the matrix in \eqref{sm-e3}.
+
+At the iteration \me{i \leq \mu}, a user \me{k} is selected based on maximizing the determinant metric \eqref{sus-e5} which corresponds to the volume enclosed by the channel vectors. The stacked channel matrix is formed with the interfering channel vector matrix \me{\mbf{H}_{b}} and the channel vector of the \me{j^\mrm{th}} user linked to the \ac{BS} \me{b}. The augmented channel matrix \me{\mbf{H}(b,j)} is given by
+\begin{equation}
+\mbf{H}(b,j) = \matscont{\mbf{H}_b \quad \mvecnxyz{h}{b}{j}^\mrm{T}}
+\label{sus-e3}
+\end{equation}
+with the volume metric of the user \me{j} is calculated as
+\begin{equation}
+m(b,j) = \det{\left ( \mbf{H}(b,j)^\mrm{H} \, \mbf{H}(b,j) \right )} \quad \fall j \inm \mc{U}_b \bs \mc{S}_b.
+\label{sus-e4}
+\end{equation}
+
+Once the user selection for \me{\mc{S}_b} is performed over all \ac{BS}'s in \me{\mc{B}}, the \ac{S-US} algorithm is said to complete one epoch. The iteration is continued with the \ac{BS} \me{\mc{C}(1)} by resetting the earlier transmission set of the \ac{BS} \me{\mc{C}(1)} only as \me{\mc{S}_{\mc{C}(1)} = \emptyset}. The transmission sets of \ac{BS}'s in \me{\mc{C} \bs \mc{C}(1)} are re-initialized with the previous epoch set. This procedure is performed recursively over each \ac{BS} \me{b} by replacing the transmission sets of other \ac{BS}'s \me{\mc{S}_{\mc{C}(s)} \fall s \inm \mc{C} \bs b} with the latest update and by resetting the current one \me{\mc{S}_{\mc{C}(b)} = \emptyset}.
+
+At each epoch, the transmission set of all \ac{BS}'s maximizes the sum rate performance by improving the transmission set of all \ac{BS}s randomly. The selection criterion for users in each \ac{BS} is governed by
+\begin{equation}
+k = \arg \max_j \; m(b,j) \quad \fall j \inm \mc{U}_b \bs \mc{S}_b.
+\label{sus-e5}
+\end{equation}
+The algorithm of \ac{S-US} scheme is similar to the \ac{C-US} scheme (sect. \ref{cus}) with the difference in the user group over which the selection is performed.
+
+
+%At each epoch, the transmission set of all \ac{BS}'s provides improved sum rate performance as the sets \me{\mc{S}_b \fall b \inm \mc{B}} are refined at each iteration by selecting the users with linearly independent channel vectors as governed by the volume maximizing criterion for each \ac{BS} \me{b} as
+%\begin{equation}
+%k = \arg \max_j \; m(b,j) \quad \fall j \inm \mc{U}_b \bs \mc{S}_b
+%\label{sus-e5}
+%\end{equation}
+%with the set update at each \ac{BS} \me{b} is given by \me{\mc{S}_b = \setcont{\mc{S}_b \cup k}}. The Algorithm \ref{sus-a1} provides the \ac{S-US} procedure in a sequential manner. The epoch is terminated after predefined epoch count \me{i_{\max}} or when the sum rate increment \me{\Delta R_{\mrm{sum}}} is of negligible value \me{\epsilon}.
+%
+%\begin{algorithm}
+% \SetAlgoLined
+% \DontPrintSemicolon
+% \KwIn{\me{\mvecxyz{h}{b}{j} \fall j \inm \mc{U}_b, \fall b \inm \mc{C}}}
+% \KwData{epoch index \me{i = 0}, \me{\mc{S}_b = \lbrace \emptyset \rbrace}, \me{\fall b \inm \mc{C}}}
+% \While{\me{i \leq i_{\max}} or \me{\Delta R_\mrm{sum} \geq \epsilon}}{
+% \me{i = i + 1} \;
+% \ForEach{\me{b \inm \mc{C}}}{
+% \me{\mc{S}_b = \lbrace \emptyset \rbrace} \;
+% \While{\me{\card{\mc{S}_b} \leq \mu}}{
+% \ForEach{\me{j \inm \mc{U}_b \bs \mc{S}_b}}{
+% evaluate \me{m(b,j)} using \eqref{sus-e3}-\eqref{sus-e4} \;
+% find user \me{k = \arg \max_j \; m(b,j)} \;
+% \me{\mc{S}_{b} = \setcont{\mc{S}_b \cup k}} \;
+% update \me{\mbf{H}_b} using \eqref{sus-e1}
+% }
+% }
+% update \me{\mbf{H}^{\mrm{c}}_b \fall b \inm \mc{C}} using \eqref{sus-e1:1}
+% }
+% }
+% \caption{\ac{S-US} scheme}
+% \label{sus-a1}
+%\end{algorithm}
+%
+%Once the transmission sets are defined over each \ac{BS} in \me{\mc{B}}, precoders are designed to maximize the weighted sum rate \ac{W-MMSE} \cite{wmmse_shi} or by using centralized \ac{ZF}-\ac{BF} procedure by removing interference to the neighboring cell users.

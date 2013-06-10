@@ -1,0 +1,67 @@
+
+This section deals with the user selection based on \ac{C-US} scheme, which performs selection over the users in \me{\mc{U}}. The \ac{C-US} scheme differs from the \ac{S-US} scheme over the available user set over which the selection is performed. The \ac{C-US} algorithm identifies the transmission sets \me{\mc{S}_b \fall b \inm \mc{B}} sequentially by selecting both user and the \ac{BS} at each iteration. The available \ac{DoF} is shared across the \ac{BS}'s to perform interference free transmission for the neighboring users and for the desired in-cell users.
+
+The \ac{C-US} scheme requires centralized scheduling agent, which performs user selection for all \ac{BS}'s without sharing the data across the \ac{BS}'s. The coordinate user selection scheme were considered earlier in the multi-cell framework with various scheduling strategies with the sum power minimization objective \cite{antti_coord_user_selection}. The selection schemes were proposed based on different scheduling schemes by which the users were allocated to each \ac{BS} and the precoder for each user was designed by minimizing the sum power objective with the fixed \ac{SINR} constraint.
+
+Let \me{\mc{S}_{\mc{B}}} be the set consist of tuples \me{(b,k)}, where \me{b} represents the \ac{BS} and \me{k} denotes the associated user index. The set \me{\mc{S}_{\mc{B}}} corresponds to the global transmission set formed by the union of the transmission sets \me{\mc{S}_b} with the respective \ac{BS} indices. Let the set operators \me{\mathit{f}_u,\mathit{f}_b} provide unique set of user and \ac{BS} indices when applied over sets consisting of ordered pair \me{(b,k)}, for example, applying \me{\mathit{f}_u (\lbrace \mc{B} \times \mc{U} \rbrace )} yields \me{\mc{U}}. As discussed in \ac{S-US}, the total users in the transmission set is limited to \me{\mu = \left \lfloor \sfrac{N_\mrm{T}}{N_\mrm{B}} \right \rfloor}.
+
+The algorithm is initialized by setting \me{\mc{S}_{\mc{B}} = \lbrace \emptyset \rbrace} and \me{\mc{S}_b = \lbrace \emptyset \rbrace \fall b \inm \mc{B}}. The first tuple \me{(b,k)} is identified by selecting the maximum norm channel vector \me{\mvecxyz{h}{s}{j}} as given by
+\begin{equation}
+(b,k) = \arg \max_{(s,j)} \gnorm{\mvecxyz{h}{s}{j}}, \quad \mc{S}_b = \setcont{\mc{S}_b \, \cup \, k},
+\label{cus-e1}
+\end{equation}
+where the search is performed over all possible combinations denoted by the cartesian product \me{\mc{B} \, \times \, \mc{U}}. The iteration proceeds with the selection of next tuple using the determinant criterion by stacking the channel vector between the \ac{BS} \me{s} and the users in \me{\mc{T} = \mathit{f}_u \left ( \mc{S}_{\mc{B}} \right )}. The stacked matrix of the \ac{BS} \me{s} with the user \me{j} in addition with the chosen transmission set \me{\mc{S}_{\mc{B}}} is denoted by
+\begin{eqnarray}
+\mbf{H}_s &=& \matscont{\mvecnxyz{h}{s}{\mc{T}(1)}^{\mrm{T}} \quad \dotsc \quad \mvecnxyz{h}{s}{\mc{T}(\card{\mc{T}})}^{\mrm{T}}} \label{cus-e2:1} \\
+\mbf{H}(s,j) &=& \matscont{\mbf{H}_s \quad \mvecxyz{h}{s}{j}^{\mrm{T}}} \; \fall j \inm \mc{U} \bs \mc{T}
+\label{cus-e2}
+\end{eqnarray}
+
+Once \me{\mbf{H}(s,j)} is formed \me{\fall s \inm \mc{B}}, the selection metric for each tuple in \me{\setcont{\mc{B} \times \mc{U}} \bs \mc{S}_{\mc{B}}} is evaluated as
+\begin{equation}
+m(s,j) = \det \left ( \mbf{H}(s,j)^\mrm{H} \; \mbf{H}(s,j) \right )
+\label{cus-e4}
+\end{equation}
+The tuple with the maximum metric \me{m(s,j)} is chosen and the sets are updates as given by
+\begin{eqnarray}
+(b,k) &=& \arg \max_{(s,j)} \; m(s,j) \label{cus-e5:1} \\
+\mc{S}_b &=& \setcont{\mc{S}_b \; \cup \; k}, \quad \mc{S}_{\mc{B}} = \setcont{\mc{S}_{\mc{B}} \; \cup \; (b,k)}.
+\label{cus-e5}
+\end{eqnarray}
+
+The iteration is continued until the constraint \me{\card{\mc{S}_b} = \mu \, \fall b \inm \mc{B}} is satisfied. Once the transmission set \me{\mc{S}_b} of all \ac{BS}'s are found, the \ac{C-US} algorithm completes one epoch. The above process is iterated for the next epoch by resetting the sets of \ac{BS} \me{b} as
+\begin{eqnarray}
+\mc{S}_{\mc{B}} = \mc{S}_{\mc{B}} \bs \setcont{\mc{S}_b \times b} \label{cus-e6:1}, \quad \mc{S}_b = \setcont{\emptyset}.
+\label{cus-e6}
+\end{eqnarray}
+
+The iteration over each epoch provides the fairness to each \ac{BS} by selecting the \ac{BS} order randomly at each epoch as briefed in Algorithm \ref{cus-a1}. At each epoch, the sum rate of the users in the system will be increased over previous iteration due to the volume maximizing selection by limiting the interference caused to the neighboring transmissions. The algorithm can be terminated after desired number of runs as governed by \me{i_{\max}} or when the sum rate increment \me{\Delta R_{\mrm{sum}} \leq \epsilon}.
+\begin{algorithm}
+ \SetAlgoLined
+ \DontPrintSemicolon
+ \KwIn{\me{\mvecxyz{h}{b}{k} \fall \setcont{b,k} \inm \setcont{\mc{B} \times \mc{U}}}}
+ \KwData{epoch index \me{i = 0}, \me{\mc{S}_b = \lbrace \emptyset \rbrace, \fall b \inm \mc{B}}, \me{\mc{S}_{\mc{B}} = \lbrace \emptyset \rbrace}}
+ \While{\me{i \leq i_{\max}} or \me{\Delta R_\mrm{sum} \geq \epsilon}}{
+     \me{i = i + 1} \;
+     \eIf{epoch \me{i == 1}}{
+         \ForEach{\me{s \inm \mc{B}}}{
+            \ForEach{\me{j \inm \mc{U} \bs \mc{T}}}{
+                evaluate \me{m(s,j)} using \eqref{cus-e2:1}-\eqref{cus-e4} \;
+            }
+         }
+         find the tuple and update the sets using \eqref{cus-e5:1}-\eqref{cus-e5} \;
+     }{
+        \ForEach{\me{b \inm \pi (\mc{B}) = \mc{C}}}{
+            re-initialize the sets \me{\mc{S}_b, \, \mc{S}_{\mc{B}}} using \eqref{cus-e6} \;
+            \While{\me{\card{\mc{S}_b} \leq \mu}}{
+                \ForEach{\me{j \inm \mc{U} \bs \mc{T}}}{
+                    evaluate \me{m(b,j)} using \eqref{cus-e2:1}-\eqref{cus-e4} \;
+                }
+                find and update using \eqref{cus-e5:1}-\eqref{cus-e5} \;
+            }
+        }
+     }
+ }
+ \caption{Iterative scheduling scheme}
+ \label{cus-a1}
+\end{algorithm}

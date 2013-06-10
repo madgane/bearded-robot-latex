@@ -1,0 +1,38 @@
+We consider the downlink transmission with a \me{N_\mrm{B}} \ac{BS}, having \me{N_\mrm{T}} transmit antennas and \me{K} users each with a single receive antenna. Let \me{\mc{B}} represent the set of \ac{BS} indices and the user indices associated with the \ac{BS} \me{b} is denoted as \me{\mc{U}_b \fall b \inm \mc{B}}. The received signal \me{\msclxyz{y}{b}{k}} of user \me{k} associated to \ac{BS} \me{b} is given by
+%\begin{eqnarray}
+%\msclxyz{y}{b}{k} =& \overbrace{\mvecxyz{h}{b}{k} \mvecxyz{x}{b}{k}}^{\mathclap{\text{desired term}}} \quad + \quad \overbrace{ \mvecxyz{h}{b}{k} \sum_{\mathclap{\mtext{i} \inm \mc{S}_b \bs \mtext{k}}} \mvecxyz{x}{b}{i}}^{\mathclap{\text{intra-cell interference terms}}} \nonumber \\
+% & + \quad \underbrace{ \sum_{\mathclap{\mtext{s} \inm \mc{B} \bs b}} \mvecxyz{h}{s}{k} \sum_{\mathclap{\mtext{j} \inm \mc{S}_s}} \mvecxyz{x}{s}{j}}_{\mathclap{\text{inter-cell interference terms}}} \quad + \quad \msclxyz{n}{b}{k}
+%\label{sm-e1}
+%\end{eqnarray}
+\begin{eqnarray}
+\msclxyz{y}{b}{k} = \underbrace{\mvecxyz{h}{b}{k} \mvecxyz{x}{b}{k}}_{\mathclap{\text{desired term}}} \quad + \quad \overbrace{\sum_{\mathclap{s \inm \mc{B}}} \mvecxyz{h}{s}{k} \quad \sum_{\mathclap{i \inm \mc{S}_s \bs k \inm b}} \mvecxyz{x}{s}{i}}^{\mathclap{\text{interfering terms}}} \quad + \quad \msclxyz{n}{b}{k},
+\label{sm-e1}
+\end{eqnarray}
+where vector \me{\mvecxyz{x}{b}{k} \inm \mathds{C}^{\mscrmxy{N}{T}}} represents the transmitted symbol for user \me{k} from \ac{BS} \me{b}, noise \me{\msclxyz{n}{b}{k} \sim \mc{CN}(0,\mtext{N}_0)} is circularly symmetric and complex Gaussian, the channel \me{\mvecxyz{h}{b}{k} \inm \mathds{C}^{1 \times \mscrmxy{N}{T}}} between \ac{BS} \me{b} and the user \inmt{k} with each entries drawn from \me{\sim \mc{CN}(0,\mbf{I}_{N_\mrm{T}})}, and \me{\mvecxyz{h}{s}{k} \inm \mathds{C}^{1 \times \mscrmxy{N}{T}}} denotes the channel seen by the user \me{k \inm \mc{U}_b} and the neighboring \ac{BS} \me{s}. The set \me{\mc{S}_b \subset \mc{U}_b} represents the set of user indices grouped for the current transmission instant which is determined based on the scheduling scheme for the \ac{BS} \me{b}. The transmitted symbol \me{\mvecxyz{x}{b}{k}} for the user \inmt{k} from \ac{BS} \me{b} is given as \me{\mvecxyz{x}{b}{k} = \mvecxyz{m}{b}{k} \, \msclxyz{d}{b}{k}}, where \me{\mvecxyz{m}{b}{k}} is the precoder assigned to the user \inmt{k}, and \me{\msclxyz{d}{b}{k}} represents the data for the \inmt{k^{\mtext{th}}} user with \me{\mbf{E} [\, \card{d}^2 ] = 1}. The total transmit power
+\begin{equation}
+\sum_{k \inm \mc{S}_b} \mrm{Tr} \left ( \mvecxyz{m}{b}{k} \, \mvecxyz{m}{b}{k}^{\mrm{H}} \right ) \leq \mrm{P}_{t} \; \fall b \inm \mc{B}
+\label{sm-e2}
+\end{equation}
+is limited by \me{\mrm{P}_{t}} for each \ac{BS} in the system.
+
+The precoder \me{\mvecxyz{m}{b}{k}}, which decouples the transmitted data \me{\msclxyz{d}{b}{k}}, is given by the simple \ac{ZF}-\ac{BF} scheme \cite{spencer2004zero} or by designing with \ac{W-MMSE} as discussed in \cite{wmmse_shi}. The \ac{ZF}-\ac{BF} design provides interference free transmission by inverting the augmented channel matrix formed by stacking the channel vectors of users in the transmission set of all coordinating \ac{BS}s \me{\mc{S}_s \fall s \inm \mc{B}}. The stacked channel matrix of the \ac{BS} \me{b} is given by
+\begin{eqnarray}
+\mbf{H}_b = \matscont{\mvecnxyz{h}{b}{\mc{S}_{\mc{B}(1)}(1)}^\mrm{T} \quad \mvecnxyz{h}{b}{\mc{S}_{\mc{B}(1)}(2)}^\mrm{T} \, \dotsc \, \mvecnxyz{h}{b}{\mc{S}_{\mc{B}(N_\mrm{B})}(\card{\mc{S}_{\mc{B}(N_\mrm{B})}})}^\mrm{T} }, \label{sm-e3}
+\end{eqnarray}
+where \me{\mc{S}_{\mc{B}(i)}(j)} represent the \me{j^\mrm{th}} user in the transmission set of \me{i^\mrm{th}} \ac{BS} and the precoding vector \me{\mvecxyz{m}{b}{k}} is given by the corresponding column vector of the matrix \me{\mbf{M}} given by
+\begin{equation}
+\mbf{M} = \matscont{\dotsc \, \mvecnxyz{m}{b}{\mc{S}_b(1)} \, \dotsc \, \mvecnxyz{m}{b}{\mc{S}_b(k)} \, \dotsc \,} = (\mbf{H}^\mrm{H}_b \mbf{H}_b)^{-1}\mbf{H}^\mrm{H}_b.
+\label{sm-e4}
+\end{equation}
+
+The power allocation is based on \ac{WF} principle which maximizes the sum rate by dividing power across the users
+\begin{equation}
+\msclxyz{p}{b}{k} = \matscont{\frac{1}{\lambda} - \gnorm{\mvecxyz{m}{b}{k}}^2 \; \mtext{N}_{0}}^+ \fall k \inm \mc{S}_b,
+\label{sm-e5}
+\end{equation}
+where \me{\lbrace x \rbrace^+ \equiv \max(0,x)} and
+\begin{equation}
+\mvecxyz{m}{b}{k} = \msclxyz{p}{b}{k} \, \frac{\mvecxyz{m}{b}{k}}{\gnorm{\mvecxyz{m}{b}{k}}}
+\label{sm-e6}
+\end{equation}
+represents the precoder for user \me{k \inm \mc{S}_b} with \me{\lambda \geq 0} is the dual variable for the sum power constraint \eqref{sm-e2}.

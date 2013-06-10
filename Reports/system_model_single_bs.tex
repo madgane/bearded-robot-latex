@@ -1,0 +1,27 @@
+
+We consider the downlink transmission with a single BS, having \me{\mscrmxy{N}{T}} transmit antennas and \me{K} users each with a single receive antenna. Let the users in the system be represented by the index set \me{\mc{U}} linked to the BS. The received signal \me{\msclxy{y}{k}} of user \me{k} is given by
+\begin{eqnarray}
+\msclxy{y}{k} = \underbrace{\mvecxy{h}{k} \mvecxy{x}{k}}_{\mathclap{\text{desired term}}} \quad + \quad \overbrace{ \mvecxy{h}{k} \sum_{\mathclap{\mtext{i} \inm \mc{S} \bs \mtext{k}}} \mvecxy{x}{i}}^{\mathclap{\text{interference terms}}} \quad + \quad \msclxy{n}{k}
+\label{sm-e1}
+\end{eqnarray}
+where the vector \me{\mvecxy{x}{k} \inm \mathds{C}^{\mscrmxy{N}{T} \times 1}} represents the transmitted symbol for user \me{k}, noise \me{\msclxy{n}{k} \sim \mc{CN}(0,\mtext{N}_0)} is circularly symmetric and complex Gaussian, the channel \me{\mvecxy{h}{k} \inm \mathds{C}^{1 \times \mscrmxy{N}{T}}} between BS and the user \inmt{k} with each entries drawn from \me{\sim \mc{CN}(0,\mbf{I}_{N_\mrm{T}})}. The set \me{\mc{S} \subset \mc{U}} represents the set of user indices grouped for the current transmission instant which is determined based on the scheduling scheme. The transmitted symbol \me{\mvecxy{x}{k}} for the user \inmt{k} from BS is given as \me{\mvecxy{x}{k} = \mvecxy{m}{k} \, \msclxy{d}{k}}, where \me{\mvecxy{m}{k}} is the precoder assigned to the user \inmt{k}, and \me{\msclxy{d}{k}} represents the data for the \inmt{k^{\mtext{th}}} user with \me{\mbf{E} [\, \card{d}^2 ] = 1}. The overall power constraint at the transmitter is given by
+\begin{equation}
+\sum_{k \inm \mc{S}} \mrm{Tr} \left ( \mvecxy{m}{k} \, \mvecxy{m}{k}^{\mrm{H}} \right ) \leq \mrm{P}_{t}.
+\label{sm-e2}
+\end{equation}
+
+Precoder \me{\mvecxy{m}{k}}, which decouples the transmitted data \me{\msclxy{d}{k}}, is given by the simple zero-forcing (ZF) scheme or by using \ac{W-MMSE} as discussed in \cite{wmmse_shi}. The ZF precoder is given by the inverse of stacked channel of all users in \me{\mc{S}} as discussed in \cite{spencer2004zero}. The stacked channel matrix \me{\mbf{H}} and the un-normalized precoder matrix \me{\mbf{M}} are given by
+\begin{eqnarray}
+\mbf{H} &=& \matscont{\mvecnxy{h}{\mc{S}(1)}^\mrm{T} \, \mvecnxy{h}{\mc{S}(2)}^\mrm{T} \, \dotsc \, \mvecnxy{h}{\mc{S}(\card{\mc{S}})}^\mrm{T}}^\mrm{T} \label{sm-e3:1} \\
+\mbf{M} &=& \matscont{\mvecnxy{m}{\mc{S}(1)} \, \dotsc \, \mvecnxy{m}{\mc{S}(\card{\mc{S}})}} \nonumber \\
+&=& \mbf{H}^{\dagger} = (\mbf{H}^\mrm{H} \mbf{H})^{-1}\mbf{H}^\mrm{H}
+\label{sm-e3}
+\end{eqnarray}
+
+The power allocation to maximize the sum capacity is achieved by performing water-filling with \me{\lambda} as a dual variable for \eqref{sm-e2} as given by
+\begin{equation}
+p_k = \matscont{\frac{1}{\lambda} - \gnorm{\mvecxy{m}{k}}^2 \; \mtext{N}_{0}}^+ \fall k \inm \mc{S}
+\label{sm-e4}
+\end{equation}
+where \me{\lbrace x \rbrace^+ \equiv \max(0,x)} and \me{\mvecxy{m}{k} = p_k \frac{\mvecxy{m}{k}}{\gnorm{\mvecxy{m}{k}}}}
+represents the precoder for user \me{k \inm \mc{S}}.

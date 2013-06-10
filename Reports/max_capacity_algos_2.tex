@@ -1,0 +1,56 @@
+
+The selection of users for MU-MIMO transmission requires linearly independent channel vectors which are for example achieved by the \ac{SP} scheme using the \ac{GS} procedure. The linearly independent users can be selected by projecting the channel vector of user \me{k} onto the subspace orthogonal to the span of channel vectors in \me{\mbf{H}}. The orthogonal subspace (null space) \eqref{mca3-e1} requires to evaluate the inverse of the matrix which demands higher complexity of \me{O(N^3)} with \me{N} being the size of the matrix. The \ac{RNS} scheduling scheme provides an approximation to the null space evaluation by a series of projections and achieves significantly closer to \ac{SP} scheme in the sum rate performance.
+
+The null space of the channel vectors of users in \me{\mc{S}} is given by \eqref{mca3-e1} with \me{\mbf{H}} described in \eqref{sm-e3:1}. The null space can be approximated in the following way in order to reduce the complexity involved in the real time implementation. Firstly, the channel vector of the user \me{i} under consideration is projected onto the matrix \me{\mbf{U}} formed by stacking the normalized channel vectors of users in \me{\mc{S}} as
+\begin{equation}
+\mbf{U} = \matscont{ \frac{\mvecnxy{h}{\mc{S}(1)}^\mrm{H}}{\gnorm{\mvecnxy{h}{\mc{S}(1)}}} \; \frac{\mvecnxy{h}{\mc{S}(2)}^\mrm{H}}{\gnorm{\mvecnxy{h}{\mc{S}(2)}}} \; \dotsc \; \frac{\mvecnxy{h}{\mc{S}(\card{\mc{S}})}^\mrm{H}}{\gnorm{\mvecnxy{h}{\mc{S}(\card{\mc{S}})}}}}.
+\label{mca2-e1}
+\end{equation}
+The projection of the channel vector \me{\mvecxy{h}{i}} onto the matrix \me{\mbf{U}} is denoted by the row vector \me{\mvecxy{g}{i}}
+\begin{equation}
+\mvecxy{g}{i} = \mvecxy{h}{i} \, \mbf{U}, \fall i \inm \mc{U} \bs \mc{S}
+\label{mca2-e2}
+\end{equation}
+with each entry of \me{\msclxy{g}{i}(l)} representing the projection of the channel vector \me{\mvecxy{h}{i}} on to the \me{l^\mrm{th}} column vector of the matrix \me{\mbf{U}} denoted by \me{\mvecxy{u}{l}}. The approximation of the null space \eqref{mca3-e1} projection of \me{i^\mrm{th}} user channel vector is given by the product of perpendicular distances as shown in \eqref{mca2-e3}.
+
+The null space projection equivalent for user \me{i} is represented by \me{\msclxy{m}{i}},
+\begin{equation}
+\msclxy{m}{i} = \prod^{\card{\mc{S}}}_{l = 1} \left ( \, \gnorm{\mvecxy{h}{i}} - \card{\msclxy{g}{i}(l)} \, \right ), \fall i \inm \mc{U} \bs \mc{S}
+\label{mca2-e3}
+\end{equation}
+which will be zero when the given vector is collinear with the existing users in \me{\mc{S}}. The initial user is selected based on the maximum norm criterion as in \cite{sus2006zfbf} and is represented by \eqref{mca3-e2}.
+
+The following provides the relation between the metric based on null space projection and its approximation for a system with \me{N_\mrm{T} = 2}. Let us consider the set \me{\mc{S}} which is populated with the user index \me{i} with channel \me{\mvecxy{h}{i} = \matscont{h_{i1} \, h_{i2}}}. The projection matrix of the row vector \me{\mvecxy{h}{i}} is given by \me{\mvecxy{h}{i}^\mrm{H} (\mvecxy{h}{i} \, \mvecxy{h}{i}^\mrm{H})^{-1} \mvecxy{h}{i}} and the projection gain on to the null space \eqref{mca3-e1} is given by
+\begin{equation}
+\left \| \, \mvecxy{h}{j} - \mvecxy{h}{j} \frac{\mvecxy{h}{i}^\mrm{H} \, \mvecxy{h}{i}}{\gnorm{\mvecxy{h}{i}}^2} \, \right \|_2
+\label{mca2-e4}
+\end{equation}
+The projection gain based on the approximate null space projection leads to the following metric
+\begin{equation}
+\gnorm{\mvecxy{h}{j}} - \frac{\left | \mvecxy{h}{i} \mvecxy{h}{j}^\mrm{H} \right |}{\gnorm{\mvecxy{h}{i}}}.
+\label{mca2-e5}
+\end{equation}
+Eq. \eqref{mca2-e5} provides a conservative estimate for \eqref{mca2-e4} by evaluating the distance between the vector \me{\mvecxy{h}{i}} and the projected vector \me{\frac{\mvecxy{h}{i} \, \mvecxy{h}{j}^\mrm{H}}{\gnorm{\mvecxy{h}{i}}}}. The two metric are similar when the vectors are either orthogonal or co-phased. The algorithmic is provided in \ref{mca2-a1}.
+\begin{algorithm}
+ \SetAlgoLined
+ \DontPrintSemicolon
+ \KwIn{\me{\mvecxy{h}{i} \fall i \inm \mc{U} }}
+ \KwData{\me{\mc{S} = \emptyset, \, \mbf{U} = [\,]}}
+ \While{\me{\card{S} \leq N_\mrm{T}}}{
+ \eIf{\me{\mc{S} = \emptyset}}{\me{\msclxy{m}{i} = \gnorm{\mvecxy{h}{i}}, \, \fall i \inm \mc{U}}}{
+ \ForEach{\me{ i \inm \mc{U} \bs \mc{S}}}{
+ evaluate \me{\msclxy{m}{i}} using \eqref{mca2-e3} \;
+ }
+ }
+ \me{\mc{S} = \{ \, \mc{S} \cup k \, \}} where \me{\displaystyle k = \argmax_i \: \msclxy{m}{i}} \;
+ formulate \me{\mbf{U}} using \eqref{mca2-e1} \;
+ }
+ \caption{Selection using Reduced Null Space scheme}
+ \label{mca2-a1}
+\end{algorithm}
+
+The number of complex operations involved with the \ac{RNS} scheme is given by
+\begin{eqnarray*}
+\zeta_4 = O \left ( \varphi + \sum^{N_\mrm{T}}_{q = 2} (K - q + 1) \, (q \, (N_\mrm{T} + 1) - 1) \right ),
+\end{eqnarray*}
+where \me{\varphi = K \, N_\mrm{T}} denote the complex operations involved in the norm calculation.

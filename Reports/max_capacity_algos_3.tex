@@ -1,0 +1,22 @@
+
+The user selection for MU-MIMO requires the channel vectors of the transmission set to be as orthogonal as possible in order to achieve the multiplexing gain. The selection of \me{\card{\mc{S}} \leq N_\mrm{T}} requires an exhaustive search of \me{\leq {^K C _{N_\mrm{T}}}} order complexity. Near-optimal schemes for determining the set \me{\mc{S}} were proposed in \cite{dimic2005downlink,shen2006low,antti_user_selection,sus2006zfbf,zhang2007user}. They are based on successive projection over the already chosen user set.
+
+The selection process is initialized by picking the user with the maximum channel norm. The successive users are then identified at each iteration by selecting the user with the maximum projection onto the null space formed with the channel vectors of users in \me{\mc{S}}. At each iteration, \me{\card{S}} is updated with the user selected with the maximum norm and \eqref{sm-e3:1} is also updated accordingly to evaluate the null space \eqref{mca3-e1} for the next iteration. The procedure terminates when the condition \me{\card{\mc{S}} = N_\mrm{T}} is met. The condition corresponds to the limiting multiplexing gain available with \me{N_\mrm{T}} transmit antennas.
+
+The null space of the channel vectors of user indices in the set \me{\mc{S}} is obtained by
+\begin{eqnarray}
+\mbf{N}(\mc{S}) &=& \mbf{I} - \mbf{H}^\mrm{H} ( \, \mbf{H} \mbf{H}^\mrm{H} \, )^{-1} \mbf{H}
+\label{mca3-e1}
+\end{eqnarray}
+with \me{\mbf{H}} as given by \eqref{sm-e3:1}. At each iteration, the user \me{j} is selected based on the following objective
+\begin{equation}
+j = \arg \max_i \gnorm{\mvecxy{h}{i} \, \mbf{N}(\mc{S})} \, \fall i \inm \mc{U} \bs \mc{S}.
+\label{mca3-e2}
+\end{equation}
+
+The selection scheme discussed in \cite{jin2010novel,ko2012determinant} provides an alternative interpretation of the successive projections discussed in \cite{dimic2005downlink,shen2006low,antti_user_selection,sus2006zfbf,zhang2007user}. Instead of maximizing the projection gain over the null space, the volume subtended by the channel vectors of users in \me{\mc{S}} and the channel vector of user \me{k \inm \mc{U} \bs \mc{S}} was evaluated. The channel vector of the user, which encloses the maximum volume with the vectors of users in \me{\mc{S}}, is chosen at the end of the current iteration. The above procedure is followed till the limiting size on \me{\mc{S}} was achieve as discussed earlier.
+
+The complexity analysis of \ac{SP} scheme is discussed briefly. The number of complex multiplications involved in selecting the first user is \me{\varphi = K \, N_\mrm{T}}, which is attributed to the norm of the channel vectors. The remaining users are selected by projecting on to the null space of the users in \me{\mc{S}}. The null space of the chosen set of users has \me{N_\mrm{T} \times (q - 1)} dimensions and \me{q} represents the iteration index or \me{\card{\mc{S}}}. The complex multiplication involved in evaluating \eqref{mca3-e1} is given as \me{\xi(x) = x^2 \, N_\mrm{T} + O(x^3) + x \, N_\mrm{T} \, (N_\mrm{T} + x) } where \me{x} represents the number of channel vectors in \me{\mbf{H}} and \me{O(x^3)} represents the complexity involved with the inverse calculation for the matrix sized \me{x = q} at each iteration. The complexity involved is in the order of
+\begin{eqnarray*}
+\zeta_1 = O \left ( \varphi + \sum^{N_\mrm{T}}_{q = 2} \underbrace{N_\mrm{T}(1 + N_\mrm{T}) \, (K - q + 1)}_{\mathclap{\text{projection and norm for each user}}} + \xi(q - 1) \right )
+\end{eqnarray*}

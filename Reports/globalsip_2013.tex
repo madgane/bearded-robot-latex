@@ -1,0 +1,100 @@
+\documentclass[conference,9pt,final]{./../../windows_latex_template/IEEEtran5/IEEEtran}
+
+\input{./../References/packages_file}
+\input{./../References/acrons}
+\graphicspath{{./../Figures/}}
+\DeclareGraphicsExtensions{.eps}
+
+%\doublespacing
+
+\title{Iterative Scheduling for Cell-Edge in Multi-Cell MU-MIMO}
+\author{\IEEEauthorblockN{Ganesh Venkatraman, Antti T\"{o}lli, Janne Janhunen and Markku Juntti}
+\IEEEauthorblockA{Center for Wireless Communications (CWC), University of Oulu, Oulu, FI-90014\\
+Email: \{gvenkatr, antti.tolli, janne.janhunen, markku.juntti\}@ee.oulu.fi}
+}
+
+
+\begin{document}
+
+\maketitle
+
+\input{./../References/shortcut_commands}
+
+\begin{abstract}
+\input{abstract_multi_bs}
+\end{abstract}
+
+\acresetall
+
+\section{Introduction}
+
+\input{introduction_multi_bs}
+
+\section{System Model}
+
+\input{system_model_multi_bs}
+
+%\section{Single BS User Scheduling} \label{sbus}
+
+%The scheduling schemes for single BS scenario are discussed briefly with a background note on the existing algorithms followed with the proposed algorithms.
+
+%\subsection{Existing User Selection}
+
+%\input{max_capacity_algos_3}
+
+%\subsection{AHP based User Selection}
+
+%\input{max_capacity_algos_1}
+
+%\subsection{Reduced Null space Selection}
+
+%\input{max_capacity_algos_2}
+
+%\subsection{Queue based User Scheduling} \label{qbus}
+
+%In this section, we discuss the selection schemes which considers the queue backlogs of each user and aims at minimizing it for each users in the set \me{\mc{U}}. Even though the users are selected based on the objective of minimizing the queues, power allocation based on water-filling (WF-PA) for zero-forcing (ZF) precoders has the objective of maximizing the sum capacity. The WF-PA scheme is replaced with the queue based power allocation scheme which uses queue weighted sum rate maximization objective (QW-PA).
+
+%The W-MMSE based precoding scheme is also analyzed in this section for the precoder design with the expected queue minimizing objective. The following section discusses two selection schemes with the objective of reducing the queues namely weighted user selection and percentile proportional fair scheduling scheme.
+
+%\subsubsection{Queue weighted User scheduling} \label{weighted-queue-sched}
+
+%\input{queue_based_algos_1}
+
+%\subsubsection{Percentile proportional fair scheduling}
+
+%\input{queue_based_algos_2}
+
+%\section{Multi BS User Scheduling}
+
+%The selection of users to maximize the system throughput with multiple BS is considered here. The scheduling schemes based on the user set over which the selection is carried out for multi-BS scenario is addressed in this section.
+
+\section{Static User Scheduling} \label{sus}
+
+\input{static_user_scheduling}
+
+\section{Coordinate User Scheduling}\label{cus}
+
+\input{coordinate-user-selection}
+
+\section{Numerical Results}
+
+%\input{power-alloc.tex}
+
+%\subsection{Single BS-US}
+
+%\input{results_single_bs}
+
+%\subsection{Multi BS-US}
+
+\input{results_multi_bs}
+
+\acresetall
+
+\section{Conclusions}
+
+\input{conclusions}
+
+\bibliographystyle{./../../windows_latex_template/IEEEtranBST2/IEEEtranS}
+\bibliography{./../Library/kirja_survey}
+
+\end{document}
